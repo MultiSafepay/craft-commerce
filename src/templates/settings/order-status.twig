@@ -1,0 +1,123 @@
+{% extends "multisafepay/_layouts/settings" %}
+
+{% import "_includes/forms" as forms %}
+
+{% set selectedItem = "order-status-settings" %}
+
+{% block sidebar %}
+    <nav>
+        <ul>
+            <li class="heading"><span>General</span></li>
+            <li>
+                <a href="{{ url('multisafepay') }}">Settings</a>
+            </li>
+            <li>
+                <a href="{{ url('multisafepay/settings/order-status') }}" class="sel">Order status settings</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block content %}
+
+    <form action="" method="post" accept-charset="UTF-8" data-saveshortcut>
+        <input type="hidden" name="action" value="multisafepay/settings/save-settings">
+        {{ redirectInput('multisafepay/settings/order-status') }}
+        {{ csrfInput() }}
+
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_INITIALIZED', settings),
+            name: 'settings[orderStatusInitialized]',
+            value: settings.orderStatusInitialized,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusInitialized'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_UNCLEARED', settings),
+            name: 'settings[orderStatusUncleared]',
+            value: settings.orderStatusUncleared,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusUncleared'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_RESERVED', settings),
+            name: 'settings[orderStatusReserved]',
+            value: settings.orderStatusReserved,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusReserved'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_VOID', settings),
+            name: 'settings[orderStatusVoid]',
+            value: settings.orderStatusVoid,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusVoid'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_DECLINED', settings),
+            name: 'settings[orderStatusDeclined]',
+            value: settings.orderStatusDeclined,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusDeclined'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_CHARGEBACK', settings),
+            name: 'settings[orderStatusChargeback]',
+            value: settings.orderStatusChargeback,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusChargeback'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_REFUNDED', settings),
+            name: 'settings[orderStatusRefunded]',
+            value: settings.orderStatusRefunded,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusRefunded'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_EXPIRED', settings),
+            name: 'settings[orderStatusExpired]',
+            value: settings.orderStatusExpired,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusExpired'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_PARTIAL_REFUNDED', settings),
+            name: 'settings[orderStatusPartialRefunded]',
+            value: settings.orderStatusPartialRefunded,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusPartialRefunded'),
+            required: false,
+        }) }}
+
+        {{ forms.selectField({
+            label: "Status: " ~ constant('ORDER_STATUS_COMPLETED', settings),
+            name: 'settings[orderStatusCompleted]',
+            value: settings.orderStatusCompleted,
+            options: orderStatuses,
+            errors: settings.getErrors('orderStatusCompleted'),
+            required: false,
+        }) }}
+
+        <input type="submit" class="btn submit" value="{{ 'Save' }}">
+
+    </form>
+
+{% endblock %}

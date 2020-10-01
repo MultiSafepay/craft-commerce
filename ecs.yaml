@@ -1,0 +1,11 @@
+imports:
+  - { resource: 'vendor/multisafepay/coding-standards/php71.yml', ignore_errors: not_found }
+
+parameters:
+  skip:
+    PHP_CodeSniffer\Standards\Squiz\Sniffs\Commenting\FunctionCommentSniff.InvalidNoReturn:
+      - 'src/gateways/base/BaseGateway.php'
+      - 'src/models/RequestResponse.php'
+      - 'src/models/RefundResponse.php'
+    PHP_CodeSniffer\Standards\Squiz\Sniffs\Commenting\FunctionCommentSniff.ScalarTypeHintMissing:
+      - 'src/gateways/base/BaseGateway.php'

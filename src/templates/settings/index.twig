@@ -1,0 +1,55 @@
+{% extends "multisafepay/_layouts/settings" %}
+
+{% import "_includes/forms" as forms %}
+
+{% block sidebar %}
+    <nav>
+        <ul>
+            <li class="heading"><span>General</span></li>
+            <li>
+                <a href="{{ url('multisafepay') }}" class="sel">Settings</a>
+            </li>
+            <li>
+                <a href="{{ url('multisafepay/settings/order-status') }}">Order status settings</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block content %}
+
+    <form action="" method="post" accept-charset="UTF-8" data-saveshortcut>
+        <input type="hidden" name="action" value="multisafepay/settings/save-settings">
+        {{ redirectInput('multisafepay') }}
+        {{ csrfInput() }}
+
+        {{ forms.textField({
+            label: "API key",
+            name: 'settings[apiKey]',
+            required: true,
+            value: settings.apiKey
+        }) }}
+
+        {{ forms.lightSwitchField({
+            first: true,
+            label: "Test mode",
+            name: 'settings[testMode]',
+            id: 'testMode',
+            on: settings.testMode,
+            errors: settings ? settings.getErrors('testMode') : [],
+        }) }}
+
+        {{ forms.selectField({
+            label: "Order status when shipped",
+            name: 'settings[statusShipped]',
+            value: settings.statusShipped,
+            options: orderStatuses,
+            errors: settings.getErrors('statusShipped'),
+            required: false,
+        }) }}
+
+        <input type="submit" class="btn submit" value="{{ 'Save' }}">
+
+    </form>
+
+{% endblock %}

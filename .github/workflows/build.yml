@@ -1,0 +1,56 @@
+name: Build
+on:
+  schedule:
+    - cron: '0 2 * * 0' # Weekly on Sundays at 02:00
+  push:
+jobs:
+  integration_tests:
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: craft
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    runs-on: ubuntu-latest
+    name: Codeception
+    steps:
+      - name: Install php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
+      - name: Download Shop
+        uses: actions/checkout@v2
+        with:
+          repository: craftcms/demo
+      - name: Composer install
+        run: composer install
+      #      - name: Update database
+      #        run: mysql craft -e "source happylager.sql"
+      - name: Install Shop
+        run: |
+          cp .env.example .env
+          php craft setup/security-key
+          sed -i 's/DB_PASSWORD=""'/'DB_PASSWORD="password"/g' .env
+          sed -i 's/DB_DATABASE=""'/'DB_DATABASE="craft"/g' .env
+      - name: Save Token
+        # Step should be removed when PHP-SDK is released
+        run: composer config --global github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
+      - name: Add repository
+        run: composer config repositories.multisafepay vcs https://github.com/${GITHUB_REPOSITORY}/
+      - name: Install dependencies
+        run: |
+          composer require craftcms/commerce multisafepay/craft-commerce:dev-${GITHUB_REF##*/} codeception/codeception codeception/module-phpbrowser codeception/module-asserts codeception/module-yii2 --ignore-platform-reqs --no-update
+          composer update --ignore-platform-reqs
+      - name: Update .env file
+        run: |
+          cp vendor/multisafepay/craft-commerce/tests/.env.example vendor/multisafepay/craft-commerce/tests/.env
+          sed -i 's/DB_DSN="mysql:host=<host>;port=<port>;dbname=<dbname>"'/'DB_DSN="mysql:host=127.0.0.1;port=${{ job.services.mysql.ports['3306'] }};dbname=craft"/g' vendor/multisafepay/craft-commerce/tests/.env
+          sed -i 's/DB_PASSWORD=""'/'DB_PASSWORD="password"/g' vendor/multisafepay/craft-commerce/tests/.env
+          sed -i 's/DB_DATABASE=""'/'DB_DATABASE="lamp"/g' vendor/multisafepay/craft-commerce/tests/.env
+      - name: Run Codeception
+        working-directory: ./vendor/multisafepay/craft-commerce
+        run: php ./../../../vendor/bin/codecept run unit,functional --coverage-xml coverage.xml

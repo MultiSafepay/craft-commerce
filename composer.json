@@ -1,0 +1,60 @@
+{
+    "name": "multisafepay/craft-commerce",
+    "description": "Adding MultiSafepay payment functionality to Craft Commerce",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "multisafepay"
+    ],
+    "support": {
+        "docs": "https://github.com/MultiSafepay/craft-commerce",
+        "issues": "https://github.com/MultiSafepay/craft-commerce/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MultiSafepay",
+            "homepage": "https://github.com/MultiSafepay/"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.2",
+        "craftcms/commerce": "^3.1.0",
+        "multisafepay/php-sdk": "^4.0",
+        "php-http/guzzle6-adapter": "^2.0",
+        "guzzlehttp/psr7": "^1.6",
+        "http-interop/http-factory-guzzle": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "multisafepay\\multisafepay\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "MultiSafepay",
+        "handle": "multisafepay",
+        "developer": "MultiSafepay",
+        "developerUrl": "https://github.com/MultiSafepay/",
+        "documentationUrl": "https://github.com/MultiSafepay/craft-commerce",
+        "changelogUrl": "https://github.com/MultiSafepay/craft-commerce/CHANGELOG.md",
+        "class": "multisafepay\\multisafepay\\MultiSafepay"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "multisafepay/coding-standards": "dev-master",
+        "codeception/codeception": "^4.0.0",
+        "codeception/module-phpbrowser": "^1.0.0",
+        "codeception/module-asserts": "^1.0.0",
+        "codeception/module-yii2": "^1.0.0",
+        "vlucas/phpdotenv": "^3.0"
+    },
+    "scripts": {
+        "code-sniffer": "@php vendor/bin/ecs check src --clear-cache",
+        "fix-cs": "@code-sniffer --fix"
+    }
+}
