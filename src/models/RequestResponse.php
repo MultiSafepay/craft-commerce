@@ -67,8 +67,7 @@ class RequestResponse implements RequestResponseInterface
      */
     public function isRedirect(): bool
     {
-        $data = $this->order->getData();
-        return $data['type'] === self::MSP_REDIRECT_TYPE;
+        return true;
     }
 
     /**
