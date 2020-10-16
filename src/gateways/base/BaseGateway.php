@@ -10,6 +10,7 @@ use craft\commerce\models\payments\OffsitePaymentForm;
 use craft\commerce\models\PaymentSource;
 use craft\commerce\models\Transaction;
 use craft\web\Response as WebResponse;
+use MultiSafepay\Api\Transactions\OrderRequest\Arguments\GatewayInfoInterface;
 use multisafepay\multisafepay\models\RefundResponse;
 use multisafepay\multisafepay\models\RequestResponse;
 use multisafepay\multisafepay\MultiSafepay;
@@ -33,6 +34,15 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
     const SUPPORTS_REFUND = true;
     const SUPPORTS_PARTIAL_REFUND = true;
     const SUPPORTS_WEBHOOKS = false;
+
+    /**
+     * @param BasePaymentForm $form
+     * @return GatewayInfoInterface
+     */
+    public function getGatewayInfo(BasePaymentForm $form): GatewayInfoInterface
+    {
+        return new BaseGatewayInfo();
+    }
 
     /**
      * Returns payment Form HTML
@@ -145,7 +155,7 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
         /** @var TransactionService $transactionService */
         $transactionService = MultiSafepay::getInstance()->transactionService;
 
-        $order = $orderService->createOrder($transaction, $this->getGatewayCode(), $this->getType());
+        $order = $orderService->createOrder($transaction, $this->getGatewayCode(), $this->getType(), $this->getGatewayInfo($form));
         $mspTransaction = $transactionService->createTransaction($order);
 
         return new RequestResponse($order, $mspTransaction, $transaction);

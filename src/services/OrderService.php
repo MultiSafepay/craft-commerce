@@ -13,6 +13,7 @@ use craft\errors\ElementNotFoundException;
 use craft\helpers\UrlHelper;
 use MultiSafepay\Api\Transactions\OrderRequest;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\Description;
+use MultiSafepay\Api\Transactions\OrderRequest\Arguments\GatewayInfoInterface;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\PaymentOptions;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\PluginDetails;
 use MultiSafepay\Api\Transactions\TransactionResponse;
@@ -51,15 +52,21 @@ class OrderService extends Component
     }
 
     /**
-     * @param Transaction $transaction
-     * @param string      $gatewayCode
-     * @param string      $type
+     * @param Transaction          $transaction
+     * @param string               $gatewayCode
+     * @param string               $type
+     * @param GatewayInfoInterface $gatewayInfo
      * @return OrderRequest
      * @throws CurrencyException
      * @throws Exception
      * @throws InvalidConfigException
      */
-    public function createOrder(Transaction $transaction, string $gatewayCode = '', string $type = 'redirect')
+    public function createOrder(
+        Transaction $transaction,
+        string $gatewayCode = '',
+        string $type = 'redirect',
+        GatewayInfoInterface $gatewayInfo = null
+    )
     {
         $order = new OrderRequest();
         $order->addOrderId($transaction->getOrder()->number)
@@ -67,12 +74,12 @@ class OrderService extends Component
             ->addGatewayCode($gatewayCode)
             ->addType($type)
             ->addPluginDetails($this->createPluginDetails())
+            ->addGatewayInfo($gatewayInfo)
             ->addDescription($this->createDescription($transaction->orderId))
             ->addPaymentOptions($this->createPaymentOptions($transaction))
             ->addShoppingCart($this->shoppingCartService->createShoppingCart($transaction->getOrder()))
             ->addCustomer($this->customerService->createCustomerDetails($transaction->getOrder()))
             ->addDelivery($this->customerService->createDeliveryDetails($transaction->getOrder()));
-
         return $order;
     }
 

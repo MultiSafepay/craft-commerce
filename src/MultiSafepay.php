@@ -22,6 +22,7 @@ use craft\web\UrlManager;
 use multisafepay\multisafepay\gateways\base\BaseGateway;
 use multisafepay\multisafepay\models\Settings;
 use multisafepay\multisafepay\services\CustomerService;
+use multisafepay\multisafepay\services\IssuerService;
 use multisafepay\multisafepay\services\MoneyService;
 use multisafepay\multisafepay\services\OrderService;
 use multisafepay\multisafepay\services\SdkService;
@@ -78,6 +79,7 @@ class MultiSafepay extends Plugin
             'transactionService' => TransactionService::class,
             'customerService' => CustomerService::class,
             'taxService' => TaxService::class,
+            'issuerService' => IssuerService::class,
         ]);
 
         Event::on(
