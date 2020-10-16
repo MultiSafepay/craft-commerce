@@ -5,12 +5,12 @@
 {% block sidebar %}
     <nav>
         <ul>
-            <li class="heading"><span>General</span></li>
+            <li class="heading"><span>{{ "General" |t('multisafepay') }}</span></li>
             <li>
-                <a href="{{ url('multisafepay') }}" class="sel">Settings</a>
+                <a href="{{ url('multisafepay') }}" class="sel">{{ 'Settings'|t('multisafepay') }}</a>
             </li>
             <li>
-                <a href="{{ url('multisafepay/settings/order-status') }}">Order status settings</a>
+                <a href="{{ url('multisafepay/settings/order-status') }}">{{ 'Order status settings'|t('multisafepay') }}</a>
             </li>
         </ul>
     </nav>
@@ -32,7 +32,7 @@
 
         {{ forms.lightSwitchField({
             first: true,
-            label: "Test mode",
+            label: "Test mode"|t('multisafepay'),
             name: 'settings[testMode]',
             id: 'testMode',
             on: settings.testMode,
@@ -40,7 +40,7 @@
         }) }}
 
         {{ forms.selectField({
-            label: "Order status when shipped",
+            label: "Order status when shipped"|t('multisafepay'),
             name: 'settings[statusShipped]',
             value: settings.statusShipped,
             options: orderStatuses,
