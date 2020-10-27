@@ -1,3 +1,9 @@
+## 1.1.0 - 2020-10-27
+
+### Added
+- Dutch translations for the MultiSafepay control panel section
+- Bank selection in checkout form for iDEAL
+
 ## 1.0.1 - 2020-10-13
 
 ### Fixed
