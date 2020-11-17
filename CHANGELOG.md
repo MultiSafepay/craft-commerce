@@ -1,5 +1,10 @@
 ## 1.1.0 - 2020-10-27
 
+### Fixed
+- Allow no tax rate to be set, default to 0% tax
+
+## 1.1.0 - 2020-10-27
+
 ### Added
 - Dutch translations for the MultiSafepay control panel section
 - Bank selection in checkout form for iDEAL
