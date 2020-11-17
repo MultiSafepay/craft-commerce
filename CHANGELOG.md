@@ -1,4 +1,4 @@
-## 1.1.0 - 2020-10-27
+## 1.1.1 - 2020-11-17
 
 ### Fixed
 - Allow no tax rate to be set, default to 0% tax
