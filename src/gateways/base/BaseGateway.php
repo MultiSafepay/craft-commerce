@@ -162,7 +162,7 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
     }
 
     /**
-     * Makes an refund request.
+     * Makes a refund request.
      *
      * @param Transaction $transaction The refund transaction
      * @return RequestResponseInterface

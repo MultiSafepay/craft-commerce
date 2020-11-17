@@ -16,15 +16,21 @@ class TaxService extends Component
      */
     public function getItemTaxRate(Order $order): int
     {
-        $taxOptions = $order->getAdjustmentsByType('tax')[0]->getSourceSnapshot();
-        $taxableSubject = $taxOptions['taxable'];
+
+        $taxObject = $order->getAdjustmentsByType('tax');
         $taxRate = 0;
-        if ($taxableSubject === TaxRateRecord::TAXABLE_PRICE ||
-            $taxableSubject === TaxRateRecord::TAXABLE_PRICE_SHIPPING ||
-            $taxableSubject === TaxRateRecord::TAXABLE_ORDER_TOTAL_PRICE
-        ) {
-            $taxRate = (int)($taxOptions['rate'] * 100);
+        if (!empty($taxObject)) {
+            $taxOptions = $taxObject[0]->getSourceSnapshot();
+            $taxableSubject = $taxOptions['taxable'];
+
+            if ($taxableSubject === TaxRateRecord::TAXABLE_PRICE ||
+                $taxableSubject === TaxRateRecord::TAXABLE_PRICE_SHIPPING ||
+                $taxableSubject === TaxRateRecord::TAXABLE_ORDER_TOTAL_PRICE
+            ) {
+                $taxRate = (int)($taxOptions['rate'] * 100);
+            }
         }
+
         return $taxRate;
     }
 
@@ -35,14 +41,18 @@ class TaxService extends Component
     public function getShippingTaxRate(Order $order): int
     {
         // For now we only support simple shipping tax scenarios
-        $taxOptions = $order->getAdjustmentsByType('tax')[0]->getSourceSnapshot();
-        $taxableSubject = $taxOptions['taxable'];
+        $taxObject = $order->getAdjustmentsByType('tax');
         $taxRate = 0;
-        if ($taxableSubject === TaxRateRecord::TAXABLE_ORDER_TOTAL_PRICE ||
-            $taxableSubject === TaxRateRecord::TAXABLE_ORDER_TOTAL_SHIPPING
-        ) {
-            $taxRate = (int)($taxOptions['rate'] * 100);
+        if (!empty($taxObject)) {
+            $taxOptions = $taxObject[0]->getSourceSnapshot();
+            $taxableSubject = $taxOptions['taxable'];
+            if ($taxableSubject === TaxRateRecord::TAXABLE_ORDER_TOTAL_PRICE ||
+                $taxableSubject === TaxRateRecord::TAXABLE_ORDER_TOTAL_SHIPPING
+            ) {
+                $taxRate = (int)($taxOptions['rate'] * 100);
+            }
         }
+
         return $taxRate;
     }
 
