@@ -1,3 +1,9 @@
+## 1.1.2 - 2020-11-26
+
+### Fixed
+- Fix shopping cart being emptied even when payment is cancelled
+- Fix payment flow for bank transfer
+
 ## 1.1.1 - 2020-11-17
 
 ### Fixed
