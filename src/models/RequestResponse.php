@@ -5,7 +5,6 @@ namespace multisafepay\multisafepay\models;
 
 use craft\commerce\base\RequestResponseInterface;
 use craft\commerce\models\Transaction;
-use MultiSafepay\Api\Transactions\OrderRequest;
 use MultiSafepay\Api\Transactions\TransactionResponse;
 use yii\base\NotSupportedException;
 
@@ -15,13 +14,7 @@ use yii\base\NotSupportedException;
  */
 class RequestResponse implements RequestResponseInterface
 {
-    public const MSP_REDIRECT_TYPE = 'redirect';
     public const MSP_REDIRECT_METHOD = 'GET';
-
-    /**
-     * @var OrderRequest
-     */
-    protected $order;
 
     /**
      * @var TransactionResponse
@@ -35,13 +28,11 @@ class RequestResponse implements RequestResponseInterface
 
     /**
      * RequestResponse constructor.
-     * @param OrderRequest        $order
      * @param TransactionResponse $response
      * @param Transaction         $transaction
      */
-    public function __construct(OrderRequest $order, TransactionResponse $response, Transaction $transaction)
+    public function __construct(TransactionResponse $response, Transaction $transaction)
     {
-        $this->order = $order;
         $this->response = $response;
         $this->transaction = $transaction;
     }
@@ -51,7 +42,7 @@ class RequestResponse implements RequestResponseInterface
      */
     public function isSuccessful(): bool
     {
-        return true;
+        return $this->response->getStatus() === Settings::ORDER_STATUS_COMPLETED;
     }
 
     /**
@@ -59,7 +50,9 @@ class RequestResponse implements RequestResponseInterface
      */
     public function isProcessing(): bool
     {
-        return true;
+        $paymentUrl = $this->response->getPaymentUrl();
+
+        return empty($paymentUrl) && $this->response->getStatus() === Settings::ORDER_STATUS_INITIALIZED;
     }
 
     /**
@@ -67,7 +60,9 @@ class RequestResponse implements RequestResponseInterface
      */
     public function isRedirect(): bool
     {
-        return true;
+        $paymentUrl = $this->response->getPaymentUrl();
+
+        return !empty($paymentUrl);
     }
 
     /**

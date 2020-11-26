@@ -67,4 +67,6 @@ class Gateways
         TrustPayGateway::class,
         VisaGateway::class,
     ];
+
+    const GATEWAYS_THAT_REQUIRE_PROCESSING = [BankTransferGateway::class];
 }

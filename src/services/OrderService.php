@@ -16,7 +16,6 @@ use MultiSafepay\Api\Transactions\OrderRequest\Arguments\Description;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\GatewayInfoInterface;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\PaymentOptions;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\PluginDetails;
-use MultiSafepay\Api\Transactions\TransactionResponse;
 use MultiSafepay\Api\Transactions\UpdateRequest;
 use multisafepay\multisafepay\MultiSafepay;
 use yii\base\Exception;
@@ -79,21 +78,20 @@ class OrderService extends Component
             ->addPaymentOptions($this->createPaymentOptions($transaction))
             ->addShoppingCart($this->shoppingCartService->createShoppingCart($transaction->getOrder()))
             ->addCustomer($this->customerService->createCustomerDetails($transaction->getOrder()))
-            ->addDelivery($this->customerService->createDeliveryDetails($transaction->getOrder()));
+            ->addDelivery($this->customerService->createDeliveryDetails($transaction->getOrder()))
+            // We add the transaction hash so the notification url can find the transaction
+            ->addData(['var1' => $transaction->hash]);
         return $order;
     }
 
     /**
-     * @param TransactionResponse $transactionResponse
+     * @param Order  $order
+     * @param string $status
      * @return boolean
-     * @throws ElementNotFoundException
-     * @throws Exception
-     * @throws \Throwable
      */
-    public function updateOrderStatus(TransactionResponse $transactionResponse)
+    public function updateOrderStatus(Order $order, string $status)
     {
-        $order = $this->getOrder($transactionResponse->getOrderId());
-        $newStatus = MultiSafepay::getInstance()->getSettings()->getStatusIdByMspCode($transactionResponse->getStatus());
+        $newStatus = MultiSafepay::getInstance()->getSettings()->getStatusIdByMspCode($status);
 
         if (!isset($newStatus)) {
             return false;
@@ -145,7 +143,7 @@ class OrderService extends Component
      * @param string $orderId
      * @return Order
      */
-    private function getOrder(string $orderId)
+    public function getOrder(string $orderId)
     {
         return Commerce::getInstance()->getOrders()->getOrderByNumber($orderId);
     }
@@ -187,7 +185,10 @@ class OrderService extends Component
             $cancelUrl = "https://{$cancelUrl}";
         }
 
-        $returnUrl = UrlHelper::siteUrl($transaction->getOrder()->returnUrl);
+        $returnUrl = UrlHelper::actionUrl(
+            'commerce/payments/complete-payment',
+            ['commerceTransactionId' => $transaction->id, 'commerceTransactionHash' => $transaction->hash]
+        );
         if (parse_url($returnUrl, PHP_URL_SCHEME) === null) {
             $returnUrl = "https://{$returnUrl}";
         }

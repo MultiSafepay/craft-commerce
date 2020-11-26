@@ -3,10 +3,15 @@
 namespace multisafepay\multisafepay\controllers;
 
 use Craft;
+use craft\commerce\models\Transaction;
+use craft\commerce\Plugin;
 use craft\web\Controller;
+use multisafepay\multisafepay\models\Gateways;
+use multisafepay\multisafepay\models\Settings;
 use multisafepay\multisafepay\MultiSafepay;
 use multisafepay\multisafepay\services\OrderService;
 use multisafepay\multisafepay\services\TransactionService;
+use Psr\Http\Client\ClientExceptionInterface;
 use yii\web\BadRequestHttpException;
 
 class NotificationController extends Controller
@@ -38,10 +43,8 @@ class NotificationController extends Controller
 
     /**
      * @return string
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      * @throws \Throwable
-     * @throws \craft\errors\ElementNotFoundException
-     * @throws \yii\base\Exception
      */
     public function actionOrderStatus(): string
     {
@@ -51,8 +54,38 @@ class NotificationController extends Controller
             return self::NOT_OK_STATUS;
         }
 
-        $transaction = $this->transactionService->getTransaction($transactionId);
-        $success = $this->orderService->updateOrderStatus($transaction);
+        $mspTransaction = $this->transactionService->getTransaction($transactionId);
+
+        $transactionHash = $mspTransaction->getVar1();
+
+        if (!isset($transactionHash)) {
+            return self::NOT_OK_STATUS;
+        }
+
+        $commercePlugin = Plugin::getInstance();
+        $transaction = $commercePlugin->transactions->getTransactionByHash($transactionHash);
+
+        if (!isset($transaction)) {
+            return self::NOT_OK_STATUS;
+        }
+
+        $status = $mspTransaction->getStatus();
+        $gateway = $transaction->getGateway();
+
+        // If the transaction has been paid, set to completed
+        if ($status === Settings::ORDER_STATUS_COMPLETED || (isset($gateway) && in_array(
+            get_class($gateway),
+            Gateways::GATEWAYS_THAT_REQUIRE_PROCESSING,
+            true
+        ))) {
+            $error = '';
+            $commercePlugin->getPayments()->completePayment($transaction, $error);
+        }
+
+        // Get the order again from the db, because completePayment makes changes to the order
+        $order = $this->orderService->getOrder($mspTransaction->getOrderId());
+
+        $success = $this->orderService->updateOrderStatus($order, $status);
 
         if (!$success) {
             return self::NOT_OK_STATUS;

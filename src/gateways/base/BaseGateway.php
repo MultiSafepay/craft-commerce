@@ -28,7 +28,7 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
     const SUPPORTS_AUTHORIZE = false;
     const SUPPORTS_CAPTURE = false;
     const SUPPORTS_COMPLETE_AUTHORIZE = false;
-    const SUPPORTS_COMPLETE_PURCHASE = false;
+    const SUPPORTS_COMPLETE_PURCHASE = true;
     const SUPPORTS_PAYMENT_SOURCES = false;
     const SUPPORTS_PURCHASE = true;
     const SUPPORTS_REFUND = true;
@@ -102,7 +102,12 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
      */
     public function completePurchase(Transaction $transaction): RequestResponseInterface
     {
-        throw new NotSupportedException('This functionality is not (yet) supported');
+        /** @var TransactionService $transactionService */
+        $transactionService = MultiSafepay::getInstance()->transactionService;
+
+        $mspTransaction = $transactionService->getTransaction($transaction->getOrder()->number);
+
+        return new RequestResponse($mspTransaction, $transaction);
     }
 
     /**
@@ -158,7 +163,7 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
         $order = $orderService->createOrder($transaction, $this->getGatewayCode(), $this->getType(), $this->getGatewayInfo($form));
         $mspTransaction = $transactionService->createTransaction($order);
 
-        return new RequestResponse($order, $mspTransaction, $transaction);
+        return new RequestResponse($mspTransaction, $transaction);
     }
 
     /**
