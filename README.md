@@ -20,7 +20,7 @@ You can install our plugin through Composer:
 composer require multisafepay/craft-commerce
 
 # Install MultiSafepay plugin
-./craft install/plugin multisafepay
+./craft plugin/install multisafepay
 ```
 
 ## Support
