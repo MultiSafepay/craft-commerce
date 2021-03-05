@@ -26,7 +26,7 @@ class TrustPayGateway extends BaseGateway
     /**
      * @return string
      */
-    public static function getGatewayCode(): string
+    public function getGatewayCode(): string
     {
         return 'TRUSTPAY';
     }
@@ -34,7 +34,7 @@ class TrustPayGateway extends BaseGateway
     /**
      * @return string
      */
-    public static function getType(): string
+    public function getType(): string
     {
         return 'redirect';
     }

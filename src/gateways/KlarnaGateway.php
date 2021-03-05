@@ -28,7 +28,7 @@ class KlarnaGateway extends BaseGateway
     /**
      * @return string
      */
-    public static function getGatewayCode(): string
+    public function getGatewayCode(): string
     {
         return 'KLARNA';
     }
@@ -36,7 +36,7 @@ class KlarnaGateway extends BaseGateway
     /**
      * @return string
      */
-    public static function getType(): string
+    public function getType(): string
     {
         return 'redirect';
     }

@@ -33,7 +33,7 @@ class IdealGateway extends BaseGateway
     /**
      * @return string
      */
-    public static function getGatewayCode(): string
+    public function getGatewayCode(): string
     {
         return 'IDEAL';
     }
@@ -41,7 +41,7 @@ class IdealGateway extends BaseGateway
     /**
      * @return string
      */
-    public static function getType(): string
+    public function getType(): string
     {
         return 'direct';
     }
@@ -57,7 +57,7 @@ class IdealGateway extends BaseGateway
         /** @var IssuerService $issuerService */
         $issuerService = MultiSafepay::getInstance()->issuerService;
 
-        $issuers = $issuerService->getIssuersByGatewayCode(self::getGatewayCode());
+        $issuers = $issuerService->getIssuersByGatewayCode($this->getGatewayCode());
 
         $oldMode = Craft::$app->view->getTemplateMode();
         Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);

@@ -26,7 +26,7 @@ class BankTransferGateway extends BaseGateway
     /**
      * @return string
      */
-    public static function getGatewayCode(): string
+    public function getGatewayCode(): string
     {
         return 'BANKTRANS';
     }
@@ -34,7 +34,7 @@ class BankTransferGateway extends BaseGateway
     /**
      * @return string
      */
-    public static function getType(): string
+    public function getType(): string
     {
         return 'direct';
     }
