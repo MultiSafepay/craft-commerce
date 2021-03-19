@@ -1,0 +1,10 @@
+{% from "_includes/forms" import textField %}
+
+{{ textField({
+    label: 'Gateway code'|t('multisafepay'),
+    id: 'gatewayCode',
+    name: 'gatewayCode',
+    value: gateway.gatewayCode,
+    errors: gateway.getErrors('gatewayCode')
+}) }}
+

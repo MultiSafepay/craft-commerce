@@ -13,6 +13,7 @@ use multisafepay\multisafepay\gateways\CreditCardGateway;
 use multisafepay\multisafepay\gateways\DotpayGateway;
 use multisafepay\multisafepay\gateways\EInvoicingGateway;
 use multisafepay\multisafepay\gateways\EPSGateway;
+use multisafepay\multisafepay\gateways\GenericGateway;
 use multisafepay\multisafepay\gateways\GiropayGateway;
 use multisafepay\multisafepay\gateways\IdealGateway;
 use multisafepay\multisafepay\gateways\IdealQRGateway;
@@ -47,6 +48,7 @@ class Gateways
         DotpayGateway::class,
         EInvoicingGateway::class,
         EPSGateway::class,
+        GenericGateway::class,
         GiropayGateway::class,
         IdealGateway::class,
         IdealQRGateway::class,
