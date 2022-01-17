@@ -18,7 +18,6 @@ use multisafepay\multisafepay\gateways\GiropayGateway;
 use multisafepay\multisafepay\gateways\IdealGateway;
 use multisafepay\multisafepay\gateways\IdealQRGateway;
 use multisafepay\multisafepay\gateways\In3Gateway;
-use multisafepay\multisafepay\gateways\INGHomePayGateway;
 use multisafepay\multisafepay\gateways\KBCGateway;
 use multisafepay\multisafepay\gateways\KlarnaGateway;
 use multisafepay\multisafepay\gateways\MaestroGateway;
@@ -53,7 +52,6 @@ class Gateways
         IdealGateway::class,
         IdealQRGateway::class,
         In3Gateway::class,
-        INGHomePayGateway::class,
         KBCGateway::class,
         KlarnaGateway::class,
         MaestroGateway::class,
