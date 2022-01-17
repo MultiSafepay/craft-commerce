@@ -25,7 +25,6 @@
         "craftcms/cms": "^3.2",
         "craftcms/commerce": "^3.1.0",
         "multisafepay/php-sdk": "^4.0",
-        "php-http/guzzle6-adapter": "^2.0",
         "guzzlehttp/psr7": "^1.6",
         "http-interop/http-factory-guzzle": "^1.0"
     },
