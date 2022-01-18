@@ -46,7 +46,11 @@ class ShoppingCartService extends Component
             $items[] = $this->createCartItem($lineItem, $order->getPaymentCurrency());
         }
 
-        $items[] = $this->createShippingCostItem($order);
+        $shippingItem = $this->createShippingCostItem($order);
+
+        if (isset($shippingItem)) {
+            $items[] = $shippingItem;
+        }
         return new ShoppingCart($items);
     }
 
@@ -71,9 +75,13 @@ class ShoppingCartService extends Component
      * @throws CurrencyException
      * @throws InvalidConfigException
      */
-    private function createShippingCostItem(Order $order): CartItem
+    private function createShippingCostItem(Order $order): ?CartItem
     {
         $cartItem = new CartItem();
+        $shippingMethod = $order->getShippingMethod();
+        if (! isset($shippingMethod)) {
+            return null;
+        }
         return $cartItem->addName($order->getShippingMethod()->getName())
             ->addQuantity(1)
             ->addUnitPrice($this->moneyService->createMoney($this->taxService->getShippingPrice($order), $order->getPaymentCurrency()))
