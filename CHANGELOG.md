@@ -1,6 +1,18 @@
 ## 1.2.0 - 2021-03-19
 
 ### Added
+- Guzzle 7 dependency
+
+### Fixed
+- Allow shipping item to not be set
+
+### Removed
+- ING Home'Pay
+- Guzzle 6 dependency
+
+## 1.2.0 - 2021-03-19
+
+### Added
 - Generic gateway
 
 ## 1.1.2 - 2020-11-26
