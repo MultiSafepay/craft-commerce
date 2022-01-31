@@ -21,7 +21,7 @@ class SdkService extends Component
     public function init(): void
     {
         $apiKey = Craft::parseEnv(MultiSafepay::getInstance()->getSettings()->apiKey);
-        $isProduction = !(Craft::parseEnv(MultiSafepay::getInstance()->getSettings()->testMode));
+        $isProduction = !(Craft::parseEnv((string) MultiSafepay::getInstance()->getSettings()->testMode));
         $this->sdk = new Sdk($apiKey, $isProduction);
     }
 
