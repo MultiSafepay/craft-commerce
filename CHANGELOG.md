@@ -1,3 +1,8 @@
+## 1.3.1 - 2022-01-31
+
+### Fixed
+- Allow using booleans instead of strings within the config file
+
 ## 1.3.0 - 2022-01-18
 
 ### Added
