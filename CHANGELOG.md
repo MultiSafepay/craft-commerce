@@ -1,3 +1,8 @@
+## 1.4.0 - 2022-05-12
+
+### Fixed
+- Allow using guzzlehttp/psr7 version 1 or 2
+
 ## 1.3.1 - 2022-01-31
 
 ### Fixed
