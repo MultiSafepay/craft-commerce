@@ -63,7 +63,7 @@ class TaxService extends Component
      */
     public function getItemPrice(LineItem $item): float
     {
-        $itemPrice = $item->getOnSale() ? $item->getSaleAmount() : $item->getPrice();
+        $itemPrice = $item->getOnSale() ? $item->getSalePrice() : $item->getPrice();
         if ($this->isTaxIncluded($item->getOrder())) {
             $itemTaxRate = $this->getItemTaxRate($item->getOrder()) / 100;
             $itemPrice = round($itemPrice / (1 + $itemTaxRate), 10);
