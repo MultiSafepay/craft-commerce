@@ -1,3 +1,8 @@
+## 1.4.1 - 2022-06-22
+
+### Fixed
+- Fix incorrect item price when using a discount
+
 ## 1.4.0 - 2022-05-12
 
 ### Fixed
