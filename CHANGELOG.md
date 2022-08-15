@@ -1,3 +1,11 @@
+## 1.5.0 - 2022-08-15
+
+### Added 
+- Set current site locale in Customer Details
+
+### Fixed
+- Fix order discount not showing up
+
 ## 1.4.1 - 2022-06-22
 
 ### Fixed
