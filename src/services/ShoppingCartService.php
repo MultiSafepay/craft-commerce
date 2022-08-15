@@ -3,10 +3,12 @@
 
 namespace multisafepay\multisafepay\services;
 
+use Craft;
 use craft\base\Component;
 use craft\commerce\elements\Order;
 use craft\commerce\errors\CurrencyException;
 use craft\commerce\models\LineItem;
+use craft\commerce\models\OrderAdjustment;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\ShoppingCart;
 use multisafepay\multisafepay\MultiSafepay;
 use MultiSafepay\ValueObject\CartItem;
@@ -48,6 +50,10 @@ class ShoppingCartService extends Component
 
         $shippingItem = $this->createShippingCostItem($order);
 
+        foreach ($order->getAdjustmentsByType('discount') as $discountAdjustment) {
+            $items[] = $this->createDiscountItem($discountAdjustment, $order->getPaymentCurrency());
+        }
+
         if (isset($shippingItem)) {
             $items[] = $shippingItem;
         }
@@ -87,5 +93,20 @@ class ShoppingCartService extends Component
             ->addUnitPrice($this->moneyService->createMoney($this->taxService->getShippingPrice($order), $order->getPaymentCurrency()))
             ->addTaxRate($this->taxService->getShippingTaxRate($order))
             ->addMerchantItemId('msp-shipping');
+    }
+
+    /**
+     * @param OrderAdjustment $discountItem
+     * @param string $currency
+     * @return CartItem
+     */
+    private function createDiscountItem(OrderAdjustment $discountItem, string $currency): CartItem
+    {
+        $cartItem = new CartItem();
+        return $cartItem->addName(!empty($discountItem->name) ? $discountItem->name : Craft::t('multisafepay','Discount'))
+                 ->addQuantity(1)
+                 ->addUnitPrice($this->moneyService->createMoney($discountItem->amount, $currency))
+                 ->addTaxRate(0)
+                 ->addMerchantItemId((string)$discountItem->id);
     }
 }

@@ -25,4 +25,5 @@ return [
     'E-mail' => 'E-mail',
     'Contact' => 'Contact',
     'Need assistance? Feel free to contact our integration team' => 'Hulp nodig? Neem dan gerust contact op met ons integration team',
+    'Discount' => 'Korting',
 ];
