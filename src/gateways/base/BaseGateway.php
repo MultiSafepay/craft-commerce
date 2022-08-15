@@ -3,6 +3,7 @@
 
 namespace multisafepay\multisafepay\gateways\base;
 
+use Craft;
 use craft\commerce\base\Gateway as CommerceBaseGateway;
 use craft\commerce\base\RequestResponseInterface;
 use craft\commerce\models\payments\BasePaymentForm;
@@ -161,6 +162,7 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
         $transactionService = MultiSafepay::getInstance()->transactionService;
 
         $order = $orderService->createOrder($transaction, $this->getGatewayCode(), $this->getType(), $this->getGatewayInfo($form));
+        
         $mspTransaction = $transactionService->createTransaction($order);
 
         return new RequestResponse($mspTransaction, $transaction);

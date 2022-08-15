@@ -3,6 +3,7 @@
 
 namespace multisafepay\multisafepay\services;
 
+use Craft;
 use craft\base\Component;
 use craft\commerce\elements\Order;
 use craft\commerce\models\Address;
@@ -21,6 +22,7 @@ class CustomerService extends Component
     {
         $customer = new CustomerDetails();
         $craftCustomer = $order->getCustomer();
+
         return $customer
             ->addAddress($this->createAddress($craftCustomer->getPrimaryBillingAddress()))
             ->addEmailAddress(new Customer\EmailAddress($order->getEmail()))
@@ -28,7 +30,8 @@ class CustomerService extends Component
             ->addLastName($craftCustomer->getPrimaryBillingAddress()->lastName)
             ->addPhoneNumber(new Customer\PhoneNumber($craftCustomer->getPrimaryBillingAddress()->phone))
             ->addIpAddress(new IpAddress($this->getCurrentSessionIpAddress()))
-            ->addUserAgent($this->getUserAgent());
+            ->addUserAgent($this->getUserAgent())
+            ->addLocale($this->getCurrentLocale());
     }
 
     /**
@@ -47,7 +50,8 @@ class CustomerService extends Component
             ->addLastName($shippingAddress->lastName)
             ->addPhoneNumber(new Customer\PhoneNumber($shippingAddress->phone))
             ->addIpAddress(new IpAddress($this->getCurrentSessionIpAddress()))
-            ->addUserAgent($this->getUserAgent());
+            ->addUserAgent($this->getUserAgent())
+            ->addLocale($this->getCurrentLocale());
     }
 
     /**
@@ -84,5 +88,19 @@ class CustomerService extends Component
     private function getUserAgent(): string
     {
         return $_SERVER['HTTP_USER_AGENT'];
+    }
+
+    /**
+     * @return string
+     */
+    private function getCurrentLocale(): string
+    {
+        $locale = Craft::$app->getLocale()->id;
+
+        if (strpos($locale, '-') !== false) {
+            return str_replace('-', '_', $locale);
+        }
+
+        return $locale;
     }
 }
