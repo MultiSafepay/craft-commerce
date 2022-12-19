@@ -1,5 +1,5 @@
 <div class="ideal-issuers-form">
-    <select name="issuer_id">
+    <select name="paymentForm[ideal][issuerId]">
         {% for issuer in issuers %}
             <option value="{{ issuer.code }}">{{ issuer.description }}</option>
         {% endfor %}

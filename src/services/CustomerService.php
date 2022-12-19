@@ -21,14 +21,13 @@ class CustomerService extends Component
     public function createCustomerDetails(Order $order): CustomerDetails
     {
         $customer = new CustomerDetails();
-        $craftCustomer = $order->getCustomer();
 
         return $customer
-            ->addAddress($this->createAddress($craftCustomer->getPrimaryBillingAddress()))
+            ->addAddress($this->createAddress($order->getBillingAddress()))
             ->addEmailAddress(new Customer\EmailAddress($order->getEmail()))
-            ->addFirstName($craftCustomer->getPrimaryBillingAddress()->firstName)
-            ->addLastName($craftCustomer->getPrimaryBillingAddress()->lastName)
-            ->addPhoneNumber(new Customer\PhoneNumber($craftCustomer->getPrimaryBillingAddress()->getFieldValue('phoneNumber')))
+            ->addFirstName($order->getBillingAddress()->firstName)
+            ->addLastName($order->getBillingAddress()->lastName)
+            ->addPhoneNumber(new Customer\PhoneNumber($order->getBillingAddress()->getFieldValue('phoneNumber')))
             ->addIpAddress(new IpAddress($this->getCurrentSessionIpAddress()))
             ->addUserAgent($this->getUserAgent())
             ->addLocale($this->getCurrentLocale());
@@ -68,7 +67,7 @@ class CustomerService extends Component
         return $address
             ->addStreetName($parsedAddress[0])
             ->addHouseNumber($parsedAddress[1])
-//            ->addState($craftAddress->getStateText())
+            ->addState($craftAddress->getAdministrativeArea() ?? "")
             ->addCity($craftAddress->getLocality())
             ->addCountry(new Customer\Country($craftAddress->getCountryCode()))
             ->addZipCode($craftAddress->getPostalCode());
