@@ -28,7 +28,7 @@ class CustomerService extends Component
             ->addEmailAddress(new Customer\EmailAddress($order->getEmail()))
             ->addFirstName($craftCustomer->getPrimaryBillingAddress()->firstName)
             ->addLastName($craftCustomer->getPrimaryBillingAddress()->lastName)
-            ->addPhoneNumber(new Customer\PhoneNumber($craftCustomer->getPrimaryBillingAddress()->phone))
+            ->addPhoneNumber(new Customer\PhoneNumber($craftCustomer->getPrimaryBillingAddress()->getFieldValue('phoneNumber')))
             ->addIpAddress(new IpAddress($this->getCurrentSessionIpAddress()))
             ->addUserAgent($this->getUserAgent())
             ->addLocale($this->getCurrentLocale());
@@ -48,7 +48,7 @@ class CustomerService extends Component
             ->addEmailAddress(new Customer\EmailAddress($order->getEmail()))
             ->addFirstName($shippingAddress->firstName)
             ->addLastName($shippingAddress->lastName)
-            ->addPhoneNumber(new Customer\PhoneNumber($shippingAddress->phone))
+            ->addPhoneNumber(new Customer\PhoneNumber($shippingAddress->getFieldValue('phoneNumber')))
             ->addIpAddress(new IpAddress($this->getCurrentSessionIpAddress()))
             ->addUserAgent($this->getUserAgent())
             ->addLocale($this->getCurrentLocale());
@@ -69,8 +69,8 @@ class CustomerService extends Component
             ->addStreetName($parsedAddress[0])
             ->addHouseNumber($parsedAddress[1])
 //            ->addState($craftAddress->getStateText())
-            ->addCountry(new Customer\Country($craftAddress->getCountryIso()))
             ->addCity($craftAddress->getLocality())
+            ->addCountry(new Customer\Country($craftAddress->getCountryCode()))
             ->addZipCode($craftAddress->getPostalCode());
     }
 
