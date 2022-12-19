@@ -6,7 +6,7 @@ namespace multisafepay\multisafepay\services;
 use Craft;
 use craft\base\Component;
 use craft\commerce\elements\Order;
-use craft\commerce\models\Address;
+use craft\elements\Address;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\CustomerDetails;
 use MultiSafepay\ValueObject\Customer;
 use MultiSafepay\ValueObject\IpAddress;
@@ -63,15 +63,15 @@ class CustomerService extends Component
         $address = new Customer\Address();
 
         $addressParser = new Customer\AddressParser();
-        $parsedAddress = $addressParser->parse($craftAddress->address1, $craftAddress->address2);
+        $parsedAddress = $addressParser->parse($craftAddress->getAddressLine1(), $craftAddress->getAddressLine2());
 
         return $address
             ->addStreetName($parsedAddress[0])
             ->addHouseNumber($parsedAddress[1])
-            ->addState($craftAddress->getStateText())
-            ->addCity($craftAddress->city)
+//            ->addState($craftAddress->getStateText())
             ->addCountry(new Customer\Country($craftAddress->getCountryIso()))
-            ->addZipCode($craftAddress->zipCode);
+            ->addCity($craftAddress->getLocality())
+            ->addZipCode($craftAddress->getPostalCode());
     }
 
     /**

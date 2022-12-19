@@ -56,5 +56,11 @@
     "scripts": {
         "code-sniffer": "@php vendor/bin/ecs check src --clear-cache",
         "fix-cs": "@code-sniffer --fix"
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
     }
 }

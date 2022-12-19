@@ -52,7 +52,7 @@ class IdealGateway extends BaseGateway
      * @param array $params
      * @return string|null
      */
-    public function getPaymentFormHtml(array $params)
+    public function getPaymentFormHtml(array $params): ?string
     {
         /** @var IssuerService $issuerService */
         $issuerService = MultiSafepay::getInstance()->issuerService;
@@ -79,7 +79,7 @@ class IdealGateway extends BaseGateway
         if (isset($form->issuerId)) {
             $gatewayInfo->addIssuerId($form->issuerId);
         }
-        
+
         return $gatewayInfo;
     }
 
