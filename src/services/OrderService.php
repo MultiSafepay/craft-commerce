@@ -97,7 +97,7 @@ class OrderService extends Component
             return false;
         }
 
-        $order->orderStatusId = $newStatus;
+        $order->orderStatusId = (int) $newStatus;
         try {
             \Craft::$app->getElements()->saveElement($order);
         } catch (ElementNotFoundException $e) {
