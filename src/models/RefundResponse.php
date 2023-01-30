@@ -107,7 +107,7 @@ class RefundResponse implements RequestResponseInterface
     /**
      * @return array|mixed
      */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->response->getResponseData();
     }
@@ -124,7 +124,7 @@ class RefundResponse implements RequestResponseInterface
      * @return mixed|void
      * @throws NotSupportedException
      */
-    public function redirect()
+    public function redirect() : void
     {
         throw new NotSupportedException('This functionality is not supported');
     }

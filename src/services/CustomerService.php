@@ -6,7 +6,7 @@ namespace multisafepay\multisafepay\services;
 use Craft;
 use craft\base\Component;
 use craft\commerce\elements\Order;
-use craft\commerce\models\Address;
+use craft\elements\Address;
 use MultiSafepay\Api\Transactions\OrderRequest\Arguments\CustomerDetails;
 use MultiSafepay\ValueObject\Customer;
 use MultiSafepay\ValueObject\IpAddress;
@@ -21,14 +21,13 @@ class CustomerService extends Component
     public function createCustomerDetails(Order $order): CustomerDetails
     {
         $customer = new CustomerDetails();
-        $craftCustomer = $order->getCustomer();
 
         return $customer
-            ->addAddress($this->createAddress($craftCustomer->getPrimaryBillingAddress()))
+            ->addAddress($this->createAddress($order->getBillingAddress()))
             ->addEmailAddress(new Customer\EmailAddress($order->getEmail()))
-            ->addFirstName($craftCustomer->getPrimaryBillingAddress()->firstName)
-            ->addLastName($craftCustomer->getPrimaryBillingAddress()->lastName)
-            ->addPhoneNumber(new Customer\PhoneNumber($craftCustomer->getPrimaryBillingAddress()->phone))
+            ->addFirstName($order->getBillingAddress()->firstName)
+            ->addLastName($order->getBillingAddress()->lastName)
+            ->addPhoneNumber(new Customer\PhoneNumber($order->getBillingAddress()->getFieldValue('phoneNumber')))
             ->addIpAddress(new IpAddress($this->getCurrentSessionIpAddress()))
             ->addUserAgent($this->getUserAgent())
             ->addLocale($this->getCurrentLocale());
@@ -48,7 +47,7 @@ class CustomerService extends Component
             ->addEmailAddress(new Customer\EmailAddress($order->getEmail()))
             ->addFirstName($shippingAddress->firstName)
             ->addLastName($shippingAddress->lastName)
-            ->addPhoneNumber(new Customer\PhoneNumber($shippingAddress->phone))
+            ->addPhoneNumber(new Customer\PhoneNumber($shippingAddress->getFieldValue('phoneNumber')))
             ->addIpAddress(new IpAddress($this->getCurrentSessionIpAddress()))
             ->addUserAgent($this->getUserAgent())
             ->addLocale($this->getCurrentLocale());
@@ -63,15 +62,15 @@ class CustomerService extends Component
         $address = new Customer\Address();
 
         $addressParser = new Customer\AddressParser();
-        $parsedAddress = $addressParser->parse($craftAddress->address1, $craftAddress->address2);
+        $parsedAddress = $addressParser->parse($craftAddress->getAddressLine1(), $craftAddress->getAddressLine2());
 
         return $address
             ->addStreetName($parsedAddress[0])
             ->addHouseNumber($parsedAddress[1])
-            ->addState($craftAddress->getStateText())
-            ->addCity($craftAddress->city)
-            ->addCountry(new Customer\Country($craftAddress->getCountryIso()))
-            ->addZipCode($craftAddress->zipCode);
+            ->addState($craftAddress->getAdministrativeArea() ?? "")
+            ->addCity($craftAddress->getLocality())
+            ->addCountry(new Customer\Country($craftAddress->getCountryCode()))
+            ->addZipCode($craftAddress->getPostalCode());
     }
 
     /**

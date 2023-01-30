@@ -108,7 +108,7 @@ class RequestResponse implements RequestResponseInterface
     /**
      * @return mixed
      */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->response->getData();
     }

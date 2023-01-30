@@ -51,7 +51,7 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
      * @param array $params
      * @return string|null
      */
-    public function getPaymentFormHtml(array $params)
+    public function getPaymentFormHtml(array $params): ?string
     {
         return '';
     }
@@ -162,7 +162,7 @@ abstract class BaseGateway extends CommerceBaseGateway implements GatewayInterfa
         $transactionService = MultiSafepay::getInstance()->transactionService;
 
         $order = $orderService->createOrder($transaction, $this->getGatewayCode(), $this->getType(), $this->getGatewayInfo($form));
-        
+
         $mspTransaction = $transactionService->createTransaction($order);
 
         return new RequestResponse($mspTransaction, $transaction);

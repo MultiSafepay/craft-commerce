@@ -54,7 +54,7 @@ class GenericGateway extends BaseGateway
      * @throws \Twig\Error\SyntaxError
      * @throws \yii\base\Exception
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('multisafepay/gateways/gatewaySettings', ['gateway' => $this]);
     }
