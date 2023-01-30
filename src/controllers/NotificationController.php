@@ -19,7 +19,7 @@ class NotificationController extends Controller
     public const OK_STATUS = 'ok';
     public const NOT_OK_STATUS = 'ng';
 
-    protected $allowAnonymous = true;
+    protected array|bool|int $allowAnonymous = ['order-status'];
 
     /**
      * @var TransactionService
